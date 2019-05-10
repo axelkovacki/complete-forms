@@ -18,22 +18,29 @@ const randomize = (chars = allChars, quantity = 10) => {
 const toPass = () => {
   for(let form of document.forms) {
     for(let element of form.elements) {
-      console.log(element.type)
       switch(element.type) {
         case 'text':
           element.value = randomize(simpleChars, 20);
+        break;
         case 'email':
-          element.value = randomize(simpleChars + numbers, 6) + '@' + randomize(simpleChars, 2) + '.' + randomize(simpleChars, 3);
+          element.value = randomize(simpleChars + numbers, 6) + '@' + randomize(simpleChars, 5) + '.' + randomize(simpleChars, 3);
+          console.log('aqui', element.value, element.type)
+        break;
         case 'number':
           element.value = randomize(numbers, 20);
+        break;
         case 'password':
           element.value = randomize(simpleChars + numbers, 10);
           // element.value = 123456;
+        break;
+        default:
+          continue;
       }
     }
   }
 }
 
+//Create your's tests
 const toFail = () => {
   for(let form of document.forms) {
     for(let element of form.elements) {
