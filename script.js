@@ -7,44 +7,65 @@ const simpleChars = lowerChars + upperChars;
 const allChars = numbers + simpleChars + especialChars;
 
 const randomize = (chars = allChars, quantity = 10) => {
-  let result = '';
-  for (let i = 0; i < quantity; i++) {
-    let rnum = Math.floor(Math.random() * chars.length);
-    result += chars.substring(rnum, rnum + 1);
-  }
-  return result;
+    let result = '';
+    for (let i = 0; i < quantity; i++) {
+        let rnum = Math.floor(Math.random() * chars.length);
+        if (typeof chars == "object") {
+            result += chars[rnum] < 10 ? '0' + chars[rnum] : chars[rnum];
+        } else {
+            result += chars.substring(rnum, rnum + 1);
+        }
+    }
+    return result;
 }
 
 const toPass = () => {
-  for(let form of document.forms) {
-    for(let element of form.elements) {
-      switch(element.type) {
-        case 'text':
-          element.value = randomize(simpleChars, 20);
-        break;
-        case 'email':
-          element.value = randomize(simpleChars + numbers, 6) + '@' + randomize(simpleChars, 5) + '.' + randomize(simpleChars, 3);
-          console.log('aqui', element.value, element.type)
-        break;
-        case 'number':
-          element.value = randomize(numbers, 20);
-        break;
-        case 'password':
-          element.value = randomize(simpleChars + numbers, 10);
-          // element.value = 123456;
-        break;
-        default:
-          continue;
-      }
+    for (let form of document.forms) {
+        for (let element of form.elements) {
+            switch (element.type) {
+                case 'text':
+                    element.value = randomize(simpleChars, 20);
+                    break;
+                case 'email':
+                    element.value = randomize(simpleChars + numbers, 6) + '@' + randomize(simpleChars, 5) + '.' + randomize(simpleChars, 3);
+                    console.log('aqui', element.value, element.type)
+                    break;
+                case 'number':
+                    element.value = randomize(numbers, 20);
+                    break;
+                case 'password':
+                    element.value = randomize(simpleChars + numbers, 10);
+                    // element.value = 123456;
+                    break;
+                case 'date':
+                    var mouth = randomize([...Array(12).keys()].map(i => i + 1), 1);
+                    var day = randomize([...Array(28).keys()].map(i => i + 1),1);
+
+                    element.value = randomize(numbers, 4) + '-' + mouth + '-' + day;
+                    break;
+                case 'checkbox':
+                    if (Math.floor(Math.random() * 2) == 0) {
+                        element.checked = true;
+                    } else {
+                        element.checked = false;
+                    }
+                    break;
+                case 'select-one':
+                    let num = Math.floor(Math.random() * element.options.length)
+                    element.options.selectedIndex = num;
+                    break;
+                default:
+                    continue;
+            }
+        }
     }
-  }
 }
 
 //Create your's tests
 const toFail = () => {
-  for(let form of document.forms) {
-    for(let element of form.elements) {
-      element.value = randomize(allChars, 60);
+    for (let form of document.forms) {
+        for (let element of form.elements) {
+            element.value = randomize(allChars, 60);
+        }
     }
-  }
 }
